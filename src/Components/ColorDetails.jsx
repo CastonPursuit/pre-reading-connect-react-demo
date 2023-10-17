@@ -10,9 +10,21 @@ function ColorDetails() {
   let { index } = useParams();
 
   // On page load, load color details
+useEffect(() => {
+  fetch(`${API}/colors/${index}`)
+    .then((response) => response.json())
+    .then((responseJSON) => setColor(responseJSON))
+    .catch(() => navigate("/not-found"));
+}, []);
 
   // Be able to delete a color. Return to index view.
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    fetch(`${API}/colors/${index}`, { method: "DELETE" })
+      .then(() => {
+        navigate(`/colors`);
+      })
+      .catch((error) => console.error(error));
+  };
   useEffect(() => {
     const { name } = color;
     setBackground(CSS.supports("color", name.toLowerCase()));
